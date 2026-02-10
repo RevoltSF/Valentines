@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentines</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <div id="question">
+            <h1>Will You Be My Valentine?</h1>
+            <img src="https://media.giphy.com/media/Ie4CIIvQS0bk3zwZlM/giphy.gif" alt="milk mocha bear biting" class="emoji-gif">
+            
+            <div class="buttons">
+                <button id="yesBtn">Yes! 💕</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div class="response" id="yesResponse">
+            <img src="https://media.giphy.com/media/SYo1DFS8NLhhqzzjMU/giphy.gif" alt="milk mocha bear happy" class="emoji-gif">
+            <div class="love-message">Yay! I love you! 💕</div>
+        </div>
+
+        <div class="response" id="noResponse">
+            <h1>Are you sure? 😭</h1>
+            <img src="https://media.giphy.com/media/ar71Hyi0ZKejXzMoNs/giphy.gif" alt="milk mocha bear sad" class="emoji-gif">
+            <h1 id="noResponseText" style="display: none; margin: 20px 0;">STOP TROLLING AND SAY YES ALREADY DAMN IT!</h1>
+            <div class="buttons">
+                <button id="yesBtn2">Yes! 💕</button>
+                <button id="noBtn2">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '🐇';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.getElementById('hearts').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        // Generate hearts continuously
+        setInterval(createHeart, 500);
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createHeart, i * 200);
+        }
+
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const question = document.getElementById('question');
+        const yesResponse = document.getElementById('yesResponse');
+        const noResponse = document.getElementById('noResponse');
+        
+        let noClickCount = 0;
+
+        yesBtn.addEventListener('click', () => {
+            question.style.display = 'none';
+            yesResponse.classList.add('show');
+            
+            // Extra celebration hearts
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        });
+
+        noBtn.addEventListener('click', () => {
+            question.style.display = 'none';
+            noResponse.classList.add('show');
+        });
+
+        // Handle the second set of buttons in "Are you sure?" screen
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'yesBtn2') {
+                noResponse.style.display = 'none';
+                yesResponse.classList.add('show');
+                
+                // Extra celebration hearts
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createHeart, i * 100);
+                }
+            }
+            
+            if (e.target.id === 'noBtn2') {
+                noClickCount++;
+                const yesBtn2 = document.getElementById('yesBtn2');
+                const noResponseText = document.getElementById('noResponseText');
+                
+                // Cap at 10 clicks to prevent overflow
+                if (noClickCount <= 10) {
+                    const newSize = 15 + (noClickCount * 5); // Start at 15px padding, add 5px each click
+                    const newFontSize = 18 + (noClickCount * 3); // Start at 18px, add 3px each click
+                    yesBtn2.style.padding = `${newSize}px ${newSize + 20}px`;
+                    yesBtn2.style.fontSize = `${newFontSize}px`;
+                }
+                
+                // Show troll message when hitting the cap
+                if (noClickCount === 10) {
+                    noResponseText.style.display = 'block';
+                }
+            }
+        });
+
+        // Remove the old hover effect that made the No button move
+        // (keeping the CSS hover effect you added)
+    </script>
+</body>
+</html>
